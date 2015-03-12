@@ -9,13 +9,20 @@ class Robot
     @equipped_weapon = nil
   end
 
+  def in_range?(target)
+    diff = (self.position[1] - target.position[1]) 
+    diff.abs <= 1
+  end
+
   def attack!(target)
       raise AttackError, "can only attack robots" unless target.is_a? Robot
       attack(target)
   end
 
   def attack(target)
-    equipped_weapon ? self.equipped_weapon.hit(target) : target.wound(5)
+    if in_range?(target)
+      equipped_weapon ? self.equipped_weapon.hit(target) : target.wound(5)
+    end
   end
 
   def heal!(amount)
