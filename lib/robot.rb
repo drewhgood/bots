@@ -1,4 +1,6 @@
 require_relative 'heal_error'
+require_relative 'attack_error'
+require_relative 'item'
 
 class Robot
   attr_accessor :position, :items, :items_weight, :health, :equipped_weapon
@@ -11,9 +13,9 @@ class Robot
     @equipped_weapon = nil
   end
 
-  def heal!(amount)
-      raise HealError, "unable heal a dead robot" if health <= 0
-      heal(amount)
+  def attack!(target)
+      raise AttackError, "can only attack robots" unless target.is_a? Robot
+      attack(target)
   end
 
   def attack(target)
@@ -22,6 +24,11 @@ class Robot
     else
       target.wound(5)
     end
+  end
+
+  def heal!(amount)
+      raise HealError, "unable heal a dead robot" if health <= 0
+      heal(amount)
   end
 
   def heal(amount)
@@ -72,6 +79,6 @@ class Robot
 
 end
 
-rob = Robot.new
-rob.health = 0
-rob.heal!(20)
+# rob = Robot.new
+# it = Item.new('thing',22)
+# rob.attack!(it)
