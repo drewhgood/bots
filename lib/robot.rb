@@ -9,7 +9,7 @@ class Robot
     @equipped_weapon = nil
   end
 
-  def in_range?(target)
+  def enemy_in_range?(target)
     diff = (self.position[1] - target.position[1]) 
     diff.abs <= 1
   end
@@ -20,7 +20,7 @@ class Robot
   end
 
   def attack(target)
-    if in_range?(target)
+    if enemy_in_range?(target)
       equipped_weapon ? self.equipped_weapon.hit(target) : target.wound(5)
     end
   end
@@ -38,7 +38,14 @@ class Robot
     health - amount < 0 ? @health = 0 : @health -= amount
   end
 
+  def autofeed_bolts(item)
+    if (item.is_a? BoxOfBolts) && self.health <=80
+      item.feed(self)
+    end
+  end
+
   def pick_up(item)
+   autofeed_bolts(item)
     if item.weight + items_weight > 250
       false
     else
