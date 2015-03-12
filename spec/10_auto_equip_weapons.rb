@@ -12,7 +12,7 @@ describe Robot do
   describe "#pick_up" do
     it "should automatically equip item if it's a weapon of any kind" do
       @robot.pick_up(@weapon)
-      expect(@robot.equipped_weapon).to eq(@weapon)
+      expect(@robot.equipped_weapon).to equal(@weapon)
     end
     it "should not equip the item as a weapon if it's not a weapon (duh!)" do
       @robot.pick_up(@non_weapon)
