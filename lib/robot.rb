@@ -1,7 +1,3 @@
-require_relative 'heal_error'
-require_relative 'attack_error'
-require_relative 'item'
-
 class Robot
   attr_accessor :position, :items, :items_weight, :health, :equipped_weapon
 
@@ -19,11 +15,7 @@ class Robot
   end
 
   def attack(target)
-    if equipped_weapon
-      self.equipped_weapon.hit(target)
-    else
-      target.wound(5)
-    end
+    equipped_weapon ? self.equipped_weapon.hit(target) : target.wound(5)
   end
 
   def heal!(amount)
@@ -32,30 +24,21 @@ class Robot
   end
 
   def heal(amount)
-    if health + amount > 100
-      @health = 100
-    else
-      @health += amount
-    end
+    health + amount > 100 ? @health = 100 : @health += amount
   end
 
   def wound(amount)
-    if health - amount < 0
-      @health = 0
-    else
-      @health -= amount
-    end
+    health - amount < 0 ? @health = 0 : @health -= amount
   end
 
   def pick_up(item)
-
-
     if item.weight + items_weight > 250
       false
     else
       if item.is_a? Weapon
         @equipped_weapon = item
       end
+
       @items_weight += item.weight
       @items << item
     end
@@ -78,7 +61,3 @@ class Robot
   end
 
 end
-
-# rob = Robot.new
-# it = Item.new('thing',22)
-# rob.attack!(it)

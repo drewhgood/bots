@@ -5,5 +5,4 @@ class Item
     @name = name
     @weight = weight
   end
-
 end
