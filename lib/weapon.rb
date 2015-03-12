@@ -1,9 +1,10 @@
 class Weapon < Item
 
-  attr_reader :damage
+  attr_reader :damage, :range
 
-  def initialize(name, weight, damage)
+  def initialize(name, weight, damage, range = 1)
     @damage = damage
+    @range = range
     super(name, weight)
   end
 
