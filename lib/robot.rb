@@ -11,7 +11,11 @@ class Robot
 
   def enemy_in_range?(target)
     diff = (self.position[1] - target.position[1]) 
-    diff.abs <= 1
+    diff.abs <= self.equipped_weapon.range
+  end
+
+  def dispense_grenade
+    @equipped_weapon = nil if self.equipped_weapon.is_a? Grenade
   end
 
   def attack!(target)
@@ -22,6 +26,7 @@ class Robot
   def attack(target)
     if enemy_in_range?(target)
       equipped_weapon ? self.equipped_weapon.hit(target) : target.wound(5)
+      dispense_grenade
     end
   end
 
