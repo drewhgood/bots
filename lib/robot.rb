@@ -10,8 +10,9 @@ class Robot
   end
 
   def enemy_in_range?(target)
+    (equipped_weapon) ? range = self.equipped_weapon.range : range = 1
     diff = (self.position[1] - target.position[1]) 
-    diff.abs <= self.equipped_weapon.range
+    diff.abs <= range
   end
 
   def dispense_grenade
@@ -31,7 +32,7 @@ class Robot
   end
 
   def heal!(amount)
-      raise HealError, "unable heal a dead robot" if health <= 0
+      raise HealError, "unable to heal a dead robot" if health <= 0
       heal(amount)
   end
 
@@ -43,21 +44,16 @@ class Robot
     health - amount < 0 ? @health = 0 : @health -= amount
   end
 
-  def autofeed_bolts(item)
-    if (item.is_a? BoxOfBolts) && self.health <=80
-      item.feed(self)
-    end
+  def autofeed_bolts?(item)
+    (item.is_a? BoxOfBolts) && self.health <=80
   end
 
   def pick_up(item)
-   autofeed_bolts(item)
+    item.feed(self) if autofeed_bolts?(item)
     if item.weight + items_weight > 250
       false
     else
-      if item.is_a? Weapon
-        @equipped_weapon = item
-      end
-
+      @equipped_weapon = item if item.is_a? Weapon
       @items_weight += item.weight
       @items << item
     end
